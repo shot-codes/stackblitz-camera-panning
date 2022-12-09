@@ -4,7 +4,7 @@
 	import { spring } from 'svelte/motion';
 
 	const { pointer } = useThrelte();
-	let cameraPosition = new Vector3(10, 10, 10);
+	let cameraPosition = new Vector3(10, 10, 0);
 	const cameraOrigin = cameraPosition;
 	let mesh: Mesh;
 
@@ -20,7 +20,7 @@
 	}
 </script>
 
-<T.PerspectiveCamera let:ref makeDefault position={[10, 10, 10]} fov={50}>
+<T.PerspectiveCamera let:ref makeDefaultfov={50}>
 	<TransformableObject object={ref} lookAt={mesh} position={cameraPosition} />
 </T.PerspectiveCamera>
 
