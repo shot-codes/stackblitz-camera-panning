@@ -1,21 +1,25 @@
 <script lang="ts">
 	import { T, TransformableObject, useThrelte } from '@threlte/core';
-	import { Mesh, Vector3 } from 'three';
+	import { Color, Mesh, Vector3 } from 'three';
 	import { spring } from 'svelte/motion';
 
-	const { pointer } = useThrelte();
+	const { pointer, scene } = useThrelte();
+  scene.background = new Color(0x000000);
+
 	let cameraPosition = new Vector3(10, 10, 0);
 	const cameraOrigin = cameraPosition;
 	let mesh: Mesh;
 
 	const pointerSpring = spring($pointer);
-	const cameraPositionSpring = spring(cameraOrigin);
+	const cameraPositionSpring = spring(cameraPosition);
 	$: {
 		pointerSpring.set($pointer);
 	}
 	$: {
 		cameraPositionSpring.update(
-			(c) => new Vector3(c.x, c.y + 8 * $pointerSpring.y, c.z - 8 * $pointerSpring.x)
+			(c) => { 
+        return new Vector3(cameraOrigin.x, cameraOrigin.y + 8 * $pointerSpring.y, cameraOrigin.z - 8 * $pointerSpring.x)
+      }
 		);
 	}
 </script>
