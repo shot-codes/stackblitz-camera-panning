@@ -4,23 +4,32 @@
 	import { spring } from 'svelte/motion';
 
 	const { pointer, scene } = useThrelte();
-  scene.background = new Color(0x000000);
+	scene.background = new Color(0x000000);
 
+	let rawCameraPosition = [10, 10, 0];
 	let cameraPosition = new Vector3(10, 10, 0);
 	const cameraOrigin = cameraPosition;
 	let mesh: Mesh;
 
-	const pointerSpring = spring($pointer);
-	const cameraPositionSpring = spring(cameraPosition);
+	// const pointerSpring = spring($pointer);
+	const cameraPositionSpring = spring(rawCameraPosition);
+	// $: {
+	// 	pointerSpring.set($pointer);
+	// }
 	$: {
-		pointerSpring.set($pointer);
+		cameraPositionSpring.set([
+			cameraOrigin.x,
+			cameraOrigin.y + 8 * $pointer.x,
+			cameraOrigin.z - 8 * $pointer.y
+		]);
 	}
 	$: {
-		cameraPositionSpring.update(
-			(c) => { 
-        return new Vector3(cameraOrigin.x, cameraOrigin.y + 8 * $pointerSpring.y, cameraOrigin.z - 8 * $pointerSpring.x)
-      }
+		cameraPosition.set(
+			$cameraPositionSpring[0],
+			$cameraPositionSpring[1],
+			$cameraPositionSpring[2]
 		);
+		console.log(cameraPosition);
 	}
 </script>
 
